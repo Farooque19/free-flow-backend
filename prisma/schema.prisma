@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id  Int  @id @default(autoincrement())
+  name  String
+  email  String @unique
+  password String
+  role  Role  @default(FREELANCER)
+  projects  Projects[]
+  createdAt  DateTime  @default(now())
+}
+
+model Project {
+  id  Int  @id @default(autoincrement())
+  title  String
+  description  String
+  status  String  @default("Pending")
+  freelancer  User?  @relation(fields: [freelancerId], references: [id])
+  freelancerId  Int?
+  client  User  @relation(fields: [clientid], references: [id])
+  clientId  Int?
+  createdAt  DateTime  @default(now())
+}
+
+enum Role {
+  FREELANCER
+  CLIENT
+}

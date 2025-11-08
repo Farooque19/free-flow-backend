@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -9,25 +9,58 @@ datasource db {
 }
 
 model User {
-  id  Int  @id @default(autoincrement())
-  name  String
-  email  String @unique
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
   password String
-  role  Role  @default(FREELANCER)
-  projects  Projects[]
-  createdAt  DateTime  @default(now())
+  role     Role   @default(FREELANCER)
+
+  projectsAsFreelancer Project[] @relation("FreelancerProjects")
+  projectsAsClient     Project[] @relation("ClientProjects")
+
+  createdAt DateTime @default(now())
 }
 
 model Project {
-  id  Int  @id @default(autoincrement())
-  title  String
+  id           Int       @id @default(autoincrement())
+  title        String
   description  String
-  status  String  @default("Pending")
-  freelancer  User?  @relation(fields: [freelancerId], references: [id])
-  freelancerId  Int?
-  client  User  @relation(fields: [clientid], references: [id])
-  clientId  Int?
-  createdAt  DateTime  @default(now())
+  status       String    @default("Pending")
+  freelancer   User?     @relation("FreelancerProjects", fields: [freelancerId], references: [id])
+  freelancerId Int?
+  client       User?     @relation("ClientProjects", fields: [clientId], references: [id])
+  clientId     Int?
+  tasks        Task[]
+  invoices     Invoice[]
+  createdAt    DateTime  @default(now())
+}
+
+model Task {
+  id        Int       @id @default(autoincrement())
+  title     String
+  status    String    @default("Pending")
+  projectId Int
+  project   Project   @relation(fields: [projectId], references: [id])
+  timelogs  TimeLog[]
+  cretaedAt DateTime  @default(now())
+}
+
+model TimeLog {
+  id        Int       @id @default(autoincrement())
+  taskId    Int
+  task      Task      @relation(fields: [taskId], references: [id])
+  startTime DateTime
+  endTime   DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Invoice {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  project   Project  @relation(fields: [projectId], references: [id])
+  amount    Float
+  status    String   @default("Unpaid")
+  createdAt DateTime @default(now())
 }
 
 enum Role {

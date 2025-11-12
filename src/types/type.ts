@@ -4,5 +4,7 @@ export const TYPES = {
     UserRepository: Symbol.for("Userrepository"),
     SessionRepository: Symbol.for("SessionRepository"),
     SessionServices: Symbol.for("SessionServices"),
-    SessionController: Symbol.for("SessionController")
+    SessionController: Symbol.for("SessionController"),
+    UserService: Symbol.for("UserService"),
+    UserController: Symbol.for("UserController"),
 }

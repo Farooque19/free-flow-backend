@@ -15,6 +15,12 @@ export class UserRepository {
     });
   }
 
+  async getuserById(id: number): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: { id },
+    });
+  }
+
   async createUser(name: string, email: string, password: string, role: Role) {
     await this.prisma.user.create({
       data: {

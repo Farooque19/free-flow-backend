@@ -36,4 +36,11 @@ export class UserService {
     }
     return await this.userRepository.getUserDetails(email);
   }
+
+  async getUserById(id: number): Promise<User | null> {
+    if (!id) {
+      return null;
+    }
+    return await this.userRepository.getuserById(id);
+  }
 }

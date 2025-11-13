@@ -7,4 +7,5 @@ export const TYPES = {
     SessionController: Symbol.for("SessionController"),
     UserService: Symbol.for("UserService"),
     UserController: Symbol.for("UserController"),
+    HomeController: Symbol.for("HomeController"),
 }
